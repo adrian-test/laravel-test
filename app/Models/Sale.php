@@ -20,8 +20,7 @@ class Sale extends Model
             'product_id',
             'qty',
             'unit_cost',
-            'selling_price',
-            'expiration_year'      
+            'selling_price'
     ];
 
 }

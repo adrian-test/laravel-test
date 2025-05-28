@@ -1,28 +1,34 @@
 <x-app-layout>
 
        <script>
-         function calculateSum(){
+        
+        function calculateSum(){
 
          var quantity = document.getElementById("quantity").value===""?1:document.getElementById("quantity").value;
          var unit_cost = document.getElementById("unit_cost").value===""?0:document.getElementById("unit_cost").value;
+
+         var json = JSON.parse('{!! $products_profit !!}');
+
+         var index = document.getElementById("products").value;
+
+         var profit_margin = json[index];
 
          var symbol = '£';
 
          var cost = quantity * unit_cost;
 
-         var profit_margin = 0.25;
-
-         var Shipping_cost = 10
+         var Shipping_cost = 10;
 
          var selling_price = (cost / ( 1 - profit_margin ) ) + Shipping_cost;
 
              if(selling_price > 0){
 
-                document.getElementById("selling_price").innerText =  symbol + selling_price.toFixed(2);
+                document.getElementById("selling_price").innerText = symbol + selling_price.toFixed(2);
 
                 document.getElementsByName("selling_price")[0].setAttribute("value", selling_price.toFixed(2));
-             }
-            
+
+                document.getElementsByName("product_id")[0].setAttribute("value", index);
+             }            
          }
         
        </script>
@@ -80,7 +86,32 @@
 
                       @csrf
 
-                      <div class="col-md-3">
+                        <div class="col-md-2">
+                        <label for="products">Product</label>    
+                        <select class="form-select" name="products" id="products">
+
+                            @if(isset($products))
+                                    
+                                @foreach ($products AS $id => $name)
+
+                                  <option value="{{ $id }}" 
+
+                                    @if($id ==1)
+
+                                    selected
+
+                                    @endif
+
+                                    >{{ $name  }} </option>                         
+                                
+                                @endforeach
+
+                            @endif
+
+                        </select>
+                        </div>
+
+                      <div class="col-md-2">
                         <label for="quantity" class="form-label">Quantity</label>
                         <input type="number" class="form-control" id="quantity"
                         name="quantity" placeholder="" onkeyup="calculateSum()">
@@ -89,29 +120,36 @@
                     @enderror
 
                       </div>
-                      <div class="col-md-3">
+
+
+                      <div class="col-md-2">
                         <label for="unit_cost" class="form-label">Unit Cost (£)</label>
                         <input type="number" class="form-control" id="unit_cost" name="unit_cost" placeholder="" onkeyup="calculateSum()">
                       </div>
-                      <div class="col-md-3">
+
+
+                      <div class="col-md-2">
                         <label for="selling_price" class="form-label">Selling Price</label>
                         <p id="selling_price">£00.00</p>
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
+                        <label for="unit_cost" class="submit_button">Save Sale</label>
         
-                        <button class="btn btn-primary" type="submit">Record Sale</button>
+                        <button class="btn button-temp" type="submit" id="submit_button">Record Sale</button>
 
                       </div>
 
                       <input type="hidden" name="selling_price" value="">
 
+                      <input type="hidden" name="product_id" value="">
+
                     </form>
                     <div class="mt-3">                        
                 
-                        <h2 class="fw-bold">
+                        <h1>
                             {{ __('Previous Sales') }}
-                        </h2>
+                        </h1>
                     
                     </div>
 
@@ -120,6 +158,7 @@
                         <table class="table table-bordered table-striped">
                           <thead>
                             <tr class="bg-primary"  >
+                              <th scope="col">Product</th>  
                               <th scope="col">Quantity</th>
                               <th scope="col">Unit Cost</th>
                               <th scope="col">Selling Price</th>
@@ -132,6 +171,7 @@
                                 @foreach ($sales as $sale)
 
                                     <tr>      
+                                        <td>{{ $sale['product']['name'] }}</td>  
                                         <td>{{ $sale['qty'] }}</td>     
                                         <td>£{{ number_format($sale['unit_cost']/100, 2) }}</td>      
                                         <td>£{{ number_format($sale['selling_price']/100, 2) }}</td>    

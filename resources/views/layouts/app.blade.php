@@ -16,7 +16,6 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 
-
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
@@ -27,14 +26,14 @@
 .button-temp {
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 5px 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 14px;
   margin: 4px 2px;
   cursor: pointer;
-  background-color: #008CBA
+  background-color: #0d6efd
 }
 
 </style>        
@@ -57,7 +56,7 @@
             <main>
 
                  @include('layouts.flash-messages')
-                
+
                 {{ $slot }}
             </main>
         </div>

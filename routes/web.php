@@ -19,13 +19,7 @@ Route::get('/', function () {
 
 Route::redirect('/dashboard', '/sales');
 
-// Route::get('/sales', function () {
-//     return view('coffee_sales');
-// })->middleware(['auth'])->name('coffee.sales');
-
-
 Route::get('/sales', [App\Http\Controllers\SaleController::class, 'index'])->middleware(['auth'])->name('coffee.sales');
-
 
 // store sale
 Route::post('/sale-made/', [App\Http\Controllers\SaleController::class, 'store'])->middleware(['auth'])->name('saleMade');
